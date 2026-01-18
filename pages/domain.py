@@ -46,14 +46,35 @@ class DomainPage(QWidget):
         try:
             x = sp.symbols('x', real=True)
 
-            f = sp.sympify(fx, locals={'sqrt': sp.sqrt})
+            f = sp.sympify(fx, locals={'sqrt': sp.sqrt, 'x': x})
 
             domain = sp.calculus.util.continuous_domain(f, x, sp.S.Reals)
+            print(type(domain))
 
-            domain_str = str(domain).replace("Interval", "").replace("Union", "∪")
-            domain_str = domain_str.replace("(", "(").replace(")", ")")
+            # domain_str = str(domain).replace("Interval", "").replace("Union", "∪")
+            # domain_str = domain_str.replace("(", "(").replace(")", ")")
 
-            self.result_label.setText(domain_str)
+            self.result_label.setText(self.domain_to_text(domain))
 
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Fungsi tidak valid:\n{e}")
+
+    def domain_to_text(self, domain):
+        if domain == sp.S.Reals:
+            return "{ x | x ∈ ℝ}"
+
+        if isinstance(domain, sp.Interval):
+            a, b = domain.start, domain.end
+
+            left = "<=" if not domain.left_open else "<"
+            right = "<=" if not domain.right_open else "<"
+            a_str = "-∞" if a == -sp.oo else str(a)
+            b_str = "∞" if b == sp.oo else str(b)
+
+            return f"{{ x | {a_str} {left} x {right} {b_str}, x ∈ ℝ }}"
+
+        if isinstance(domain, sp.Union):
+            parts = [self.domain_to_text(arg) for arg in domain.args]
+            return " atau ".join(parts)
+
+        return str(domain)
