@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QListWidget,
-    QStackedWidget,QHBoxLayout
+    QStackedWidget, QHBoxLayout
 )
 
 # components
@@ -11,24 +11,28 @@ from components.text_input import TextInput
 # pages
 from pages.invers import InversPage
 from pages.komposisi import KomposisiPage
-
+from pages.domain import DomainPage
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Tugas matdas gacor")
+        self.setWindowTitle("Tugas Matdas Gacor")
         self.resize(700, 400)
 
+        # Sidebar
         self.sidebar = QListWidget()
         self.sidebar.addItem("Fungsi Invers")
         self.sidebar.addItem("Fungsi Komposisi")
+        self.sidebar.addItem("Hitung Domain") 
         self.sidebar.setFixedWidth(150)
 
         # Pages
         self.stack = QStackedWidget()
         self.stack.addWidget(InversPage())
         self.stack.addWidget(KomposisiPage())
+        self.stack.addWidget(DomainPage())  
 
+        # Layout utama
         main_layout = QHBoxLayout()
         main_layout.addWidget(self.sidebar)
         main_layout.addWidget(self.stack)
@@ -37,6 +41,7 @@ class MainWindow(QMainWindow):
         container.setLayout(main_layout)
         self.setCentralWidget(container)
 
+        # Connect sidebar ke stacked widget
         self.sidebar.currentRowChanged.connect(self.stack.setCurrentIndex)
         self.sidebar.setCurrentRow(0)
 
