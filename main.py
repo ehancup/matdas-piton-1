@@ -12,6 +12,7 @@ from components.text_input import TextInput
 from pages.invers import InversPage
 from pages.komposisi import KomposisiPage
 from pages.domain import DomainPage
+from pages.range import RangePage
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -24,6 +25,7 @@ class MainWindow(QMainWindow):
         self.sidebar.addItem("Fungsi Invers")
         self.sidebar.addItem("Fungsi Komposisi")
         self.sidebar.addItem("Hitung Domain") 
+        self.sidebar.addItem("Hitung Range") 
         self.sidebar.setFixedWidth(150)
 
         # Pages
@@ -31,6 +33,7 @@ class MainWindow(QMainWindow):
         self.stack.addWidget(InversPage())
         self.stack.addWidget(KomposisiPage())
         self.stack.addWidget(DomainPage())  
+        self.stack.addWidget(RangePage())  
 
         # Layout utama
         main_layout = QHBoxLayout()
