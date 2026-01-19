@@ -15,6 +15,8 @@ from pages.domain import DomainPage
 from pages.polar import KoordinatPolarPage
 from pages.range import RangePage
 from pages.kartesius import KoordinatKartesiusPage
+from pages.turunan import TurunanPage
+
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -29,6 +31,7 @@ class MainWindow(QMainWindow):
         self.sidebar.addItem("Domain dan Range") 
         self.sidebar.addItem("Koordinat Polar")
         self.sidebar.addItem("Koordinat Kartesius")
+        self.sidebar.addItem("Turunan")
         self.sidebar.setFixedWidth(150)
 
         # Pages
@@ -38,6 +41,7 @@ class MainWindow(QMainWindow):
         self.stack.addWidget(DomainPage())  
         self.stack.addWidget(KoordinatPolarPage())
         self.stack.addWidget(KoordinatKartesiusPage())
+        self.stack.addWidget(TurunanPage())
         
 
         # Layout utama
