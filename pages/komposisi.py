@@ -7,6 +7,10 @@ from components.label_title import LabelTitle
 from components.button import Button
 from components.text_input import TextInput
 
+import numpy as np
+import matplotlib.pyplot as plt
+import lib.preinput as pri
+
 
 class KomposisiPage(QWidget):
     def __init__(self):
@@ -44,6 +48,9 @@ class KomposisiPage(QWidget):
     def hitung(self):
         fx = self.fx.text()
         gx = self.gx.text()
+        
+        fx = pri.preprocess_input(fx).replace("^", "**")
+        gx = pri.preprocess_input(gx).replace("^", "**")
 
         if not fx or not gx:
             QMessageBox.warning(self, "Error", "f(x) dan g(x) wajib diisi!")
@@ -58,6 +65,33 @@ class KomposisiPage(QWidget):
             # eq = f.subs(x, y)
             compose_fg = sp.compose(f, g)
             compose_gf = sp.compose(g, f)
+            
+            f_origin = sp.lambdify(x, f, "numpy")
+            g_origin = sp.lambdify(x, g, "numpy")
+            fog = sp.lambdify(x, compose_fg, "numpy")
+            gof = sp.lambdify(x, compose_gf, "numpy")
+            x_value = np.linspace(-10, 10, 500)
+            f_val = f_origin(x_value)
+            g_val = g_origin(x_value)
+            fog_val = fog(x_value)
+            gof_val = gof(x_value)
+
+            plt.figure()
+            plt.plot(x_value, f_val, label='f(x)')
+            plt.plot(x_value, g_val, label='g(x)')
+            plt.plot(x_value, fog_val, label='(f ∘ g)(x)', linestyle='--')
+            plt.plot(x_value, gof_val, label='(g ∘ f)(x)', linestyle='--')
+            plt.title('Grafik Fungsi Komposisi') # Judul grafik
+            plt.xlabel('x') # Label sumbu x
+            plt.ylabel('f(x)') # Label sumbu y
+            plt.grid(True)
+            plt.legend(
+                fontsize=10,
+                frameon=True,
+                shadow=True,
+                loc="best"
+            )
+            plt.show()
 
             # if not inverse:
             #     raise ValueError("Tidak ada invers")
