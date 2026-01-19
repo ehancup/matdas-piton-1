@@ -9,7 +9,7 @@ class DomainPage(QWidget):
     def __init__(self):
         super().__init__()
 
-        title = LabelTitle("Hitung Fungsi Domain")
+        title = LabelTitle("Hitung Domain dan Range")
 
         self.fx = TextInput("f(x) = ", "Masukkan fungsi f(x)")
 
@@ -23,6 +23,11 @@ class DomainPage(QWidget):
         
         self.result_label = QLabel("")
         self.result_label.setStyleSheet("font-size: 24px; font-weight: bold;")
+        
+        self.hasil_range = QLabel("Range :")
+        self.hasil_range.setStyleSheet("font-size: 18px; margin-bottom: 5px; margin-top: 10px;")
+        self.range_result = QLabel("")
+        self.range_result.setStyleSheet("font-size: 24px; font-weight: bold;")
 
         main_layout = QVBoxLayout()
         main_layout.addWidget(title)
@@ -30,6 +35,8 @@ class DomainPage(QWidget):
         main_layout.addWidget(self.save_btn)
         main_layout.addWidget(self.hasil)
         main_layout.addWidget(self.result_label)
+        main_layout.addWidget(self.hasil_range)
+        main_layout.addWidget(self.range_result)
         main_layout.addStretch()    
 
         self.setLayout(main_layout)
@@ -49,12 +56,14 @@ class DomainPage(QWidget):
             f = sp.sympify(fx, locals={'sqrt': sp.sqrt, 'x': x})
 
             domain = sp.calculus.util.continuous_domain(f, x, sp.S.Reals)
+            range_ = sp.calculus.util.function_range(f, x, sp.S.Reals)
             print(type(domain))
 
             # domain_str = str(domain).replace("Interval", "").replace("Union", "∪")
             # domain_str = domain_str.replace("(", "(").replace(")", ")")
 
-            self.result_label.setText(self.domain_to_text(domain))
+            self.result_label.setText(f"{self.domain_to_text(domain)}")
+            self.range_result.setText(f"{self.domain_to_text(range_).replace('x', 'y')}")
 
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Fungsi tidak valid:\n{e}")
