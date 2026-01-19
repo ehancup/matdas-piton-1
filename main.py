@@ -12,6 +12,7 @@ from components.text_input import TextInput
 from pages.invers import InversPage
 from pages.komposisi import KomposisiPage
 from pages.domain import DomainPage
+from pages.polar import KoordinatPolarPage
 from pages.range import RangePage
 
 class MainWindow(QMainWindow):
@@ -25,6 +26,7 @@ class MainWindow(QMainWindow):
         self.sidebar.addItem("Fungsi Invers")
         self.sidebar.addItem("Fungsi Komposisi")
         self.sidebar.addItem("Domain dan Range") 
+        self.sidebar.addItem("Koordinat Polar")
         self.sidebar.setFixedWidth(150)
 
         # Pages
@@ -32,6 +34,7 @@ class MainWindow(QMainWindow):
         self.stack.addWidget(InversPage())
         self.stack.addWidget(KomposisiPage())
         self.stack.addWidget(DomainPage())  
+        self.stack.addWidget(KoordinatPolarPage())
 
         # Layout utama
         main_layout = QHBoxLayout()
