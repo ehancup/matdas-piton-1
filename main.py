@@ -15,6 +15,7 @@ from pages.domain import DomainPage
 from pages.polar import CobaCoba
 from pages.kartesius import KoordinatKartesiusPage
 from pages.turunan import TurunanPage
+from pages.turunan_implisit import TurunanImplisitPage
 
 
 class MainWindow(QMainWindow):
@@ -30,6 +31,7 @@ class MainWindow(QMainWindow):
         self.sidebar.addItem("Domain dan Range") 
         self.sidebar.addItem("Polar & Kartesius")
         self.sidebar.addItem("Turunan")
+        self.sidebar.addItem("Turunan Implisit")
         self.sidebar.setFixedWidth(150)
 
         # Pages
@@ -39,6 +41,7 @@ class MainWindow(QMainWindow):
         self.stack.addWidget(DomainPage())  
         self.stack.addWidget(CobaCoba())
         self.stack.addWidget(TurunanPage())
+        self.stack.addWidget(TurunanImplisitPage())
         
 
         # Layout utama
