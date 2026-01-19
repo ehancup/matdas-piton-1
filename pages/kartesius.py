@@ -8,20 +8,19 @@ from components.button import Button
 from components.text_input import TextInput
 
 
-class KoordinatPolarPage(QWidget):
+class KoordinatKartesiusPage(QWidget):
     def __init__(self):
         super().__init__()
 
-        title = LabelTitle("Koordinat Polar")
-
-        self.titikx = TextInput("x = ", "Masukkan x")
-        self.titiky = TextInput("y = ", "Masukkan y")
+        title = LabelTitle("Koordinat Kartesius")
+        self.radiant = TextInput("r = ", "Masukkan radiant")
+        self.theta = TextInput("θ = ", "Masukkan theta")
 
         self.save_btn = Button("hitung")
 
         form_layout = QFormLayout()
-        form_layout.addRow(self.titikx.getLabel(), self.titikx)
-        form_layout.addRow(self.titiky.getLabel(), self.titiky)
+        form_layout.addRow(self.radiant.getLabel(), self.radiant)
+        form_layout.addRow(self.theta.getLabel(), self.theta)
 
         self.hasil = QLabel("hasil :")
         self.hasil.setStyleSheet("font-size: 18px; margin-bottom: 5px; margin-top: 10px;")
@@ -42,24 +41,22 @@ class KoordinatPolarPage(QWidget):
         self.save_btn.clicked.connect(self.hitung)
 
     def hitung(self):
-        nilaix = self.titikx.text()
-        nilaiy = self.titiky.text()
+        nilair = self.radiant.text()
+        nilaitheta = self.theta.text()
 
-        if not nilaix or not nilaiy:
-            QMessageBox.warning(self, "Error", "x dan y wajib diisi!")
+        if not nilair or not nilaitheta:
+            QMessageBox.warning(self, "Error", "r dan theta wajib diisi!")
             return
         
         try:
-            nilaix = sp.sympify(nilaix, locals={'sqrt': sp.sqrt})
-            nilaiy = sp.sympify(nilaiy, locals={'sqrt': sp.sqrt})
-            r=sp.sqrt(nilaix**2 + nilaiy**2)
-            theta=sp.atan2(nilaiy, nilaix)
-            
-            r=str(r).replace("sqrt", "√").replace("*", "")
-            theta=str(theta).replace("sqrt", "√")
-            theta=theta.replace("pi", "180")
-            theta=str(eval(theta))
-            self.result_label.setText(f"r = {r}, θ = {theta}°")
+            nilair = sp.sympify(nilair, locals={'sqrt': sp.sqrt})
+            nilaitheta = sp.sympify(nilaitheta, locals={'sqrt': sp.sqrt})
+            x= nilair * sp.cos(nilaitheta*sp.pi/180)
+            y= nilair * sp.sin(nilaitheta*sp.pi/180)
+
+            x=str(x).replace("sqrt", "√").replace("*", "")
+            y=str(y).replace("sqrt", "√").replace("*", "")
+            self.result_label.setText(f"x = {x}\ny = {y}")
             
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Fungsi tidak valid:\n{e}")

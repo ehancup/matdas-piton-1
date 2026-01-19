@@ -14,7 +14,7 @@ class KoordinatPolarPage(QWidget):
 
         title = LabelTitle("Koordinat Polar")
 
-        self.titikx = TextInput("x = ", "Masukkan x")
+        self.titikx = TextInput("r = ", "Masukkan radiant")
         self.titiky = TextInput("y = ", "Masukkan y")
 
         self.save_btn = Button("hitung")
@@ -59,7 +59,7 @@ class KoordinatPolarPage(QWidget):
             theta=str(theta).replace("sqrt", "√")
             theta=theta.replace("pi", "180")
             theta=str(eval(theta))
-            self.result_label.setText(f"r = {r}, θ = {theta}°")
+            self.result_label.setText(f"r = {r}\nθ = {theta}°")
             
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Fungsi tidak valid:\n{e}")

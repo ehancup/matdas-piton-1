@@ -14,6 +14,7 @@ from pages.komposisi import KomposisiPage
 from pages.domain import DomainPage
 from pages.polar import KoordinatPolarPage
 from pages.range import RangePage
+from pages.kartesius import KoordinatKartesiusPage
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -27,6 +28,7 @@ class MainWindow(QMainWindow):
         self.sidebar.addItem("Fungsi Komposisi")
         self.sidebar.addItem("Domain dan Range") 
         self.sidebar.addItem("Koordinat Polar")
+        self.sidebar.addItem("Koordinat Kartesius")
         self.sidebar.setFixedWidth(150)
 
         # Pages
@@ -35,6 +37,8 @@ class MainWindow(QMainWindow):
         self.stack.addWidget(KomposisiPage())
         self.stack.addWidget(DomainPage())  
         self.stack.addWidget(KoordinatPolarPage())
+        self.stack.addWidget(KoordinatKartesiusPage())
+        
 
         # Layout utama
         main_layout = QHBoxLayout()
