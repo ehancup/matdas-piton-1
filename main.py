@@ -12,8 +12,7 @@ from components.text_input import TextInput
 from pages.invers import InversPage
 from pages.komposisi import KomposisiPage
 from pages.domain import DomainPage
-from pages.polar import KoordinatPolarPage
-from pages.range import RangePage
+from pages.polar import CobaCoba
 from pages.kartesius import KoordinatKartesiusPage
 from pages.turunan import TurunanPage
 
@@ -29,8 +28,7 @@ class MainWindow(QMainWindow):
         self.sidebar.addItem("Fungsi Invers")
         self.sidebar.addItem("Fungsi Komposisi")
         self.sidebar.addItem("Domain dan Range") 
-        self.sidebar.addItem("Koordinat Polar")
-        self.sidebar.addItem("Koordinat Kartesius")
+        self.sidebar.addItem("Polar & Kartesius")
         self.sidebar.addItem("Turunan")
         self.sidebar.setFixedWidth(150)
 
@@ -39,8 +37,7 @@ class MainWindow(QMainWindow):
         self.stack.addWidget(InversPage())
         self.stack.addWidget(KomposisiPage())
         self.stack.addWidget(DomainPage())  
-        self.stack.addWidget(KoordinatPolarPage())
-        self.stack.addWidget(KoordinatKartesiusPage())
+        self.stack.addWidget(CobaCoba())
         self.stack.addWidget(TurunanPage())
         
 
@@ -56,6 +53,7 @@ class MainWindow(QMainWindow):
         # Connect sidebar ke stacked widget
         self.sidebar.currentRowChanged.connect(self.stack.setCurrentIndex)
         self.sidebar.setCurrentRow(0)
+        self.sidebar.setMidLineWidth(400)
 
 
 if __name__ == "__main__":

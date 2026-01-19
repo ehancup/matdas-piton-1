@@ -12,7 +12,7 @@ class KoordinatKartesiusPage(QWidget):
     def __init__(self):
         super().__init__()
 
-        title = LabelTitle("Koordinat Kartesius")
+        title = LabelTitle("Polar -> Kartesius")
         self.radiant = TextInput("r = ", "Masukkan radiant")
         self.theta = TextInput("θ = ", "Masukkan theta")
 

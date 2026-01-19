@@ -68,6 +68,9 @@ class InversPage(QWidget):
             y_inverse = sp.lambdify(x, inverse[0], "numpy")
             y_inv_value = y_inverse(x_value)
             
+            if not inverse:
+                raise ValueError("Tidak ada invers")
+            
             plt.figure()
             plt.plot(x_value, y_origin, label='f(x)')
             plt.plot(x_value, y_inv_value, label='f⁻¹(x)', linestyle='--')
@@ -76,9 +79,13 @@ class InversPage(QWidget):
             plt.ylabel('f(x)') # Label sumbu y
             
             plt.grid(True)
-            if not inverse:
-                raise ValueError("Tidak ada invers")
             
+            plt.legend(
+                fontsize=10,
+                frameon=True,
+                shadow=True,
+                loc="best"
+            )
             plt.show()
             inverse[0] = str(inverse[0]).replace("sqrt", "√")
             inverse[0] = str(inverse[0]).replace("**", "^")

@@ -46,6 +46,7 @@ class KomposisiPage(QWidget):
         self.save_btn.clicked.connect(self.hitung)
 
     def hitung(self):
+        plt.close('all')
         fx = self.fx.text()
         gx = self.gx.text()
         

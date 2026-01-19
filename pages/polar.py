@@ -1,20 +1,68 @@
 import sympy as sp
 from PyQt6.QtWidgets import (
-    QWidget, QLabel,  QVBoxLayout, QFormLayout, QMessageBox, 
+    QWidget, QLabel,  QVBoxLayout, QFormLayout, QMessageBox, QHBoxLayout, QPushButton, QStackedWidget
 )
 
 from components.label_title import LabelTitle
 from components.button import Button
 from components.text_input import TextInput
+from pages.kartesius import KoordinatKartesiusPage
+
+class CobaCoba(QWidget):
+    def __init__(self):
+        super().__init__()
+        
+        title = LabelTitle("Koordinat Polar & Kartesius")
+        
+        self.button_polar = QPushButton("Kartesius -> Polar")
+        self.button_polar.setCheckable(True)
+        self.button_polar.setMinimumHeight(30)
+        self.button_cartesian = QPushButton("Polar -> Kartesius")
+        self.button_cartesian.setMinimumHeight(30)
+        # self.button_cartesian.setStyleSheet("border: 1px solid white; border-radius: 5px; padding: 3px; text-color: black; color: lightgray;")
+        self.button_cartesian.setCheckable(True)
+        
+        self.button_polar.clicked.connect(lambda: self.navigate(0, self.button_polar))
+        self.button_cartesian.clicked.connect(lambda: self.navigate(1, self.button_cartesian))
+        
+        row_button = QHBoxLayout()
+        
+        row_button.addWidget(self.button_polar)
+        row_button.addWidget(self.button_cartesian)
+        
+        main_layout = QVBoxLayout()
+
+        self.stack = QStackedWidget()
+        self.stack.addWidget(KoordinatPolarPage())
+        self.stack.addWidget(KoordinatKartesiusPage())
+
+        main_layout.addWidget(title)
+        main_layout.addLayout(row_button)
+        main_layout.addWidget(self.stack)
+        main_layout.addStretch()
+        
+        
+
+        self.setLayout(main_layout)
+        
+        self.navigate(0, self.button_polar)
+    
+    def navigate(self, index, button):
+        self.stack.setCurrentIndex(index)
+
+        self.button_polar.setChecked(False)
+        self.button_cartesian.setChecked(False)
+
+        button.setChecked(True)
 
 
 class KoordinatPolarPage(QWidget):
     def __init__(self):
         super().__init__()
 
-        title = LabelTitle("Koordinat Polar")
+        title = LabelTitle("Kartesius -> Polar")
 
-        self.titikx = TextInput("r = ", "Masukkan radiant")
+        self.titikx = TextInput("x = ", "Masukkan x")
         self.titiky = TextInput("y = ", "Masukkan y")
 
         self.save_btn = Button("hitung")
