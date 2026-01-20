@@ -1,12 +1,9 @@
+import sys
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QListWidget,
     QStackedWidget, QHBoxLayout
 )
-
-# components
-from components.label_title import LabelTitle
-from components.button import Button
-from components.text_input import TextInput
+from PyQt6.QtCore import Qt
 
 # pages
 from pages.invers import InversPage
@@ -21,31 +18,74 @@ from pages.turunan_implisit import TurunanImplisitPage
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+
         self.setWindowTitle("Tugas Matdas Gacor")
-        self.resize(700, 400)
+        self.resize(900, 500)
 
-        # Sidebar
+        # =========================
+        # SIDEBAR
+        # =========================
         self.sidebar = QListWidget()
-        self.sidebar.addItem("Fungsi Invers")
-        self.sidebar.addItem("Fungsi Komposisi")
-        self.sidebar.addItem("Domain dan Range") 
-        self.sidebar.addItem("Polar & Kartesius")
-        self.sidebar.addItem("Turunan")
-        self.sidebar.addItem("Turunan Implisit")
-        self.sidebar.setFixedWidth(150)
+        self.sidebar.setFixedWidth(200)
 
-        # Pages
+        menu_items = [
+            "Fungsi Invers",
+            "Fungsi Komposisi",
+            "Domain dan Range",
+            "Polar & Kartesius",
+            "Turunan",
+            "Turunan Implisit",
+        ]
+
+        self.sidebar.addItems(menu_items)
+
+        self.sidebar.setStyleSheet("""
+            QListWidget {
+                background-color: #1e1e2f;
+                color: #ffffff;
+                border: none;
+                font-size: 14px;
+                outline: 0;
+            }
+
+            QListWidget::item {
+                padding: 14px 18px;
+                margin: 6px;
+                border-radius: 10px;
+            }
+
+            QListWidget::item:selected {
+                background-color: #4f46e5;
+                color: white;
+            }
+
+            QListWidget::item:hover {
+                background-color: #6366f1;
+            }
+        """)
+
+        self.sidebar.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.sidebar.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.sidebar.setCurrentRow(0)
+
+        # =========================
+        # STACKED PAGES
+        # =========================
         self.stack = QStackedWidget()
         self.stack.addWidget(InversPage())
         self.stack.addWidget(KomposisiPage())
-        self.stack.addWidget(DomainPage())  
+        self.stack.addWidget(DomainPage())
         self.stack.addWidget(CobaCoba())
         self.stack.addWidget(TurunanPage())
         self.stack.addWidget(TurunanImplisitPage())
-        
 
-        # Layout utama
+        # =========================
+        # LAYOUT UTAMA
+        # =========================
         main_layout = QHBoxLayout()
+        main_layout.setContentsMargins(0, 0, 0, 0)
+        main_layout.setSpacing(0)
+
         main_layout.addWidget(self.sidebar)
         main_layout.addWidget(self.stack)
 
@@ -53,14 +93,23 @@ class MainWindow(QMainWindow):
         container.setLayout(main_layout)
         self.setCentralWidget(container)
 
-        # Connect sidebar ke stacked widget
+        # =========================
+        # CONNECT
+        # =========================
         self.sidebar.currentRowChanged.connect(self.stack.setCurrentIndex)
-        self.sidebar.setCurrentRow(0)
-        self.sidebar.setMidLineWidth(400)
 
 
 if __name__ == "__main__":
-    app = QApplication([])
+    app = QApplication(sys.argv)
+
+    # Global style (opsional)
+    app.setStyleSheet("""
+        QWidget {
+            background-color: #f8fafc;
+            font-family: Segoe UI;
+        }
+    """)
+
     window = MainWindow()
     window.show()
-    app.exec()
+    sys.exit(app.exec())
