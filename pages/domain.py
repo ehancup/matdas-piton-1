@@ -61,16 +61,17 @@ class DomainPage(QWidget):
 
             # domain_str = str(domain).replace("Interval", "").replace("Union", "∪")
             # domain_str = domain_str.replace("(", "(").replace(")", ")")
+            
 
-            self.result_label.setText(f"{self.domain_to_text(domain)}")
-            self.range_result.setText(f"{self.domain_to_text(range_).replace('x', 'y')}")
+            self.result_label.setText("{ x | x ∈ ℝ}" if domain == sp.S.Reals else f"{{ x | {self.domain_to_text(domain)}, x ∈ ℝ }}")
+            self.range_result.setText("{ y | y ∈ ℝ}" if range_ == sp.S.Reals else f"{{ y | {self.domain_to_text(range_).replace('x', 'y')}, y ∈ ℝ }}")
 
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Fungsi tidak valid:\n{e}")
 
     def domain_to_text(self, domain):
-        if domain == sp.S.Reals:
-            return "{ x | x ∈ ℝ}"
+        # if domain == sp.S.Reals:
+        #     return "{ x | x ∈ ℝ}"
 
         if isinstance(domain, sp.Interval):
             a, b = domain.start, domain.end
@@ -79,11 +80,17 @@ class DomainPage(QWidget):
             right = "<=" if not domain.right_open else "<"
             a_str = "-∞" if a == -sp.oo else str(a)
             b_str = "∞" if b == sp.oo else str(b)
+            
+            print(a_str+left)
+            print(right+b_str)
 
-            return f"{{ x | {a_str} {left} x {right} {b_str}, x ∈ ℝ }}"
+            return f"{"" if (a_str+left)=="-∞<" else (a_str+" "+left+" ")}x{"" if (right+b_str)=="<∞" else (" "+right+" "+b_str)}"
 
         if isinstance(domain, sp.Union):
+            print(domain)
             parts = [self.domain_to_text(arg) for arg in domain.args]
+            s = [i.split() for i in parts]
+            print(s)
             return " atau ".join(parts)
 
         return str(domain)
