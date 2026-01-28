@@ -1,6 +1,6 @@
 import sympy as sp
 from PyQt6.QtWidgets import (
-    QWidget, QLabel,  QVBoxLayout, QFormLayout, QMessageBox, 
+    QWidget, QLabel, QVBoxLayout, QFormLayout, QMessageBox,
 )
 
 from components.label_title import LabelTitle
@@ -10,20 +10,22 @@ from lib.preinput import preprocess_input as pri
 import numpy as np
 import matplotlib.pyplot as plt
 
+from lib.valid import is_valid_input
+
 
 class TurunanImplisitPage(QWidget):
     def __init__(self):
         super().__init__()
 
         title = LabelTitle("Fungsi Turunan Implisit")
-        self.fungsi_awal = TextInput("f(x) = ", "Masukkan fungsi f(x)")
+        self.fungsi_awal = TextInput("0 = ", "Masukkan fungsi f = 0")
 
-        self.save_btn = Button("hitung")
+        self.save_btn = Button("Hitung")
 
         form_layout = QFormLayout()
         form_layout.addRow(self.fungsi_awal.getLabel(), self.fungsi_awal)
 
-        self.hasil = QLabel("hasil :")
+        self.hasil = QLabel("Hasil:")
         self.hasil.setStyleSheet("font-size: 18px; margin-bottom: 5px; margin-top: 10px;")
         
         self.result_label = QLabel("")
@@ -47,54 +49,43 @@ class TurunanImplisitPage(QWidget):
         val = pri(val).replace("^", "**")
 
         if not val:
-            QMessageBox.warning(self, "Error", "fungsi wajib diisi!")
+            QMessageBox.warning(self, "Error", "Fungsi wajib diisi!")
             return
-        
+
+        if not is_valid_input(val):
+            QMessageBox.warning(self, "Error", "Input hanya boleh mengandung huruf x dan y saja!")
+            return
+
         try:
             x, y = sp.symbols('x y')
 
+            # Konversi string input ke objek sympy
             f = sp.sympify(val, locals={'sqrt': sp.sqrt })
-            
-            dydx = -sp.diff(f, x) / sp.diff(f, y)
-            
-            F_func = sp.lambdify((x, y), f, "numpy")
-            dydx_func = sp.lambdify((x, y), dydx, "numpy")
-            derivative = sp.diff(f, x)
-            print(derivative)
-            f_origin = sp.lambdify(x, f, "numpy")
-            x_value = np.linspace(-10, 10, 500)
-            y_origin = f_origin(x_value)
-            
-            
-            xx = np.linspace(-3, 3, 400)
-            yy = np.linspace(-3, 3, 400)
-            X, Y = np.meshgrid(xx, yy)
 
+            # Hitung turunan implisit
+            dydx = -sp.diff(f, x) / sp.diff(f, y)
+
+            # Buat fungsi numerik untuk plotting
+            F_func = sp.lambdify((x, y), f, "numpy")
+
+            # Grid untuk contour plot
+            xx = np.linspace(-5, 5, 400)
+            yy = np.linspace(-5, 5, 400)
+            X, Y = np.meshgrid(xx, yy)
             Z = F_func(X, Y)
-            
-            
-            y_derivative = sp.lambdify(x, derivative, "numpy")
-            y_deriv_value = y_derivative(x_value)
-            
-            dydx = str(dydx).replace("sqrt", "√").replace("**", "^").replace("*", "")
-            plt.figure()
+
+            # Tampilkan kurva implisit
+            plt.figure(figsize=(7,6))
             plt.contour(X, Y, Z, levels=[0], colors='blue')
-            # plt.plot(x_value, y_origin, label='f(x)')
-            # plt.plot(x_value, y_deriv_value, label="f'(x)", linestyle='--')
-            plt.title(f'Grafik turunan dydx = {dydx}') # Judul grafik
-            plt.xlabel('x') # Label sumbu x
-            plt.ylabel('f(x)') # Label sumbu y
-            
+            plt.title(f'Kurva implisit: {val.replace("**", "^").replace("*", "")}\nTurunan implisit: dy/dx = {str(dydx).replace("sqrt", "√").replace("**", "^").replace("*", "")}')
+            plt.xlabel('x')
+            plt.ylabel('y')
             plt.grid(True)
-            plt.legend(
-                fontsize=10,
-                frameon=True,
-                shadow=True,
-                loc="best"
-            )
             plt.show()
 
-            self.result_label.setText(f"dydx = {dydx}")
+            # Tampilkan turunan implisit di label
+            dydx_str = str(dydx).replace("sqrt", "√").replace("**", "^").replace("*", "")
+            self.result_label.setText(f"dydx = {dydx_str}")
 
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Fungsi tidak valid:\n{e}")

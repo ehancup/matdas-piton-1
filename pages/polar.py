@@ -97,6 +97,8 @@ class KoordinatPolarPage(QWidget):
             QMessageBox.warning(self, "Error", "x dan y wajib diisi!")
             return
         
+        
+        
         try:
             nilaix = sp.sympify(nilaix, locals={'sqrt': sp.sqrt})
             nilaiy = sp.sympify(nilaiy, locals={'sqrt': sp.sqrt})

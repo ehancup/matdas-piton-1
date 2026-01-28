@@ -11,6 +11,7 @@ import re
 import numpy as np
 import matplotlib.pyplot as plt
 import lib.preinput as pri
+from lib.valid import is_valid_input
 
 
 class InversPage(QWidget):
@@ -51,7 +52,11 @@ class InversPage(QWidget):
         if not val:
             QMessageBox.warning(self, "Error", "fungsi wajib diisi!")
             return
-        
+
+        if not is_valid_input(val):
+            QMessageBox.warning(self, "Error", "Input hanya boleh mengandung huruf x dan y saja!")
+            return
+
         try:
             plt.close('all')
             x, y = sp.symbols('x y')
@@ -74,7 +79,7 @@ class InversPage(QWidget):
             plt.figure()
             plt.plot(x_value, y_origin, label='f(x)')
             plt.plot(x_value, y_inv_value, label='f⁻¹(x)', linestyle='--')
-            plt.title('Grafik Fungsi f(x) = x^2') # Judul grafik
+            plt.title('Grafik Fungsi Invers') # Judul grafik
             plt.xlabel('x') # Label sumbu x
             plt.ylabel('f(x)') # Label sumbu y
             

@@ -4,6 +4,8 @@ from PyQt6.QtWidgets import QWidget, QLabel, QVBoxLayout, QFormLayout, QMessageB
 from components.label_title import LabelTitle
 from components.button import Button
 from components.text_input import TextInput
+from lib.valid import is_valid_input
+import lib.preinput as pri
 
 class DomainPage(QWidget):
     def __init__(self):
@@ -45,9 +47,14 @@ class DomainPage(QWidget):
 
     def hitung_domain(self):
         fx = self.fx.text()
+        fx = pri.preprocess_input(fx)
 
         if not fx:
             QMessageBox.warning(self, "Error", "f(x) wajib diisi!")
+            return
+        
+        if not is_valid_input(fx):
+            QMessageBox.warning(self, "Error", "Input hanya boleh mengandung huruf x dan y saja!")
             return
         
         try:

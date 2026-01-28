@@ -6,6 +6,7 @@ from PyQt6.QtWidgets import (
 from components.label_title import LabelTitle
 from components.button import Button
 from components.text_input import TextInput
+from lib.valid import is_valid_input
 
 
 class KoordinatKartesiusPage(QWidget):
@@ -47,10 +48,16 @@ class KoordinatKartesiusPage(QWidget):
         if not nilair or not nilaitheta:
             QMessageBox.warning(self, "Error", "r dan theta wajib diisi!")
             return
-        
+
+        if not is_valid_input(nilair):
+            QMessageBox.warning(self, "Error", "Input hanya boleh mengandung huruf x dan y saja!")
+            return
+        if not is_valid_input(nilaitheta):
+            QMessageBox.warning(self, "Error", "Input hanya boleh mengandung huruf x dan y saja!")
+            return
         try:
-            nilair = sp.sympify(nilair, locals={'sqrt': sp.sqrt})
-            nilaitheta = sp.sympify(nilaitheta, locals={'sqrt': sp.sqrt})
+            nilair = sp.sympify(nilair, locals={'sqrt': sp.sqrt, 'tan': sp.tan, 'sin': sp.sin, 'cos': sp.cos})
+            nilaitheta = sp.sympify(nilaitheta, locals={'sqrt': sp.sqrt, 'tan': sp.tan, 'sin': sp.sin, 'cos': sp.cos})
             x= nilair * sp.cos(nilaitheta*sp.pi/180)
             y= nilair * sp.sin(nilaitheta*sp.pi/180)
 

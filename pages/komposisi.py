@@ -10,6 +10,7 @@ from components.text_input import TextInput
 import numpy as np
 import matplotlib.pyplot as plt
 import lib.preinput as pri
+from lib.valid import is_valid_input
 
 
 class KomposisiPage(QWidget):
@@ -56,7 +57,13 @@ class KomposisiPage(QWidget):
         if not fx or not gx:
             QMessageBox.warning(self, "Error", "f(x) dan g(x) wajib diisi!")
             return
-        
+
+        if not is_valid_input(fx):
+            QMessageBox.warning(self, "Error", "Input hanya boleh mengandung huruf x dan y saja!")
+            return
+        if not is_valid_input(gx):
+            QMessageBox.warning(self, "Error", "Input hanya boleh mengandung huruf x dan y saja!")
+            return
         try:
             x = sp.symbols('x')
 

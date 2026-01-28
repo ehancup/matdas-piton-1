@@ -10,6 +10,8 @@ from lib.preinput import preprocess_input as pri
 import numpy as np
 import matplotlib.pyplot as plt
 
+from lib.valid import is_valid_input
+
 
 class TurunanPage(QWidget):
     def __init__(self):
@@ -50,7 +52,11 @@ class TurunanPage(QWidget):
         if not val:
             QMessageBox.warning(self, "Error", "fungsi wajib diisi!")
             return
-        
+
+        if not is_valid_input(val):
+            QMessageBox.warning(self, "Error", "Input hanya boleh mengandung huruf x dan y saja!")
+            return
+
         try:
             x = sp.symbols('x')
 
